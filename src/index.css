@@ -17,6 +17,17 @@ body {
     background-color: dodgerblue;
 }
 
+.loginDiv {
+    background-color: rgb(61, 232, 132);
+    width: 200px;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem; 
+    align-items: center;
+    border-radius: 0.5rem;
+    margin-left: 40%;
+}
+
 .App {
   display: flex;
   flex-direction: column;
