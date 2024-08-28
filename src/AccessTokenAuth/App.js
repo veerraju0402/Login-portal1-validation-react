@@ -29,7 +29,7 @@ function App() {
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* we want to protect these routes */}
-        <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+        <Route element={<RequireAuth allowedRoles={[ROLES.User,ROLES.Admin]} />}>
           <Route path="/" element={<Home />} />
         </Route>
 

@@ -3,14 +3,14 @@ import useAuth from '../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import axios from '../api/axios';
-import AuthContext from '../Context/AuthProvide';
+// import AuthContext from '../Context/AuthProvide';
 const LOGIN_URL = '/login';
 
 const Login = () => {
 
-    const  auth = useContext(AuthContext);
-    console.log("auth--",auth)
-    const { setAuth } = useAuth();
+    // const  auth = useContext(AuthContext);
+    const {setAuth } = useAuth();
+    // console.log("1 setAuth--",setAuth)
 
     const navigate = useNavigate();
     const location = useLocation();

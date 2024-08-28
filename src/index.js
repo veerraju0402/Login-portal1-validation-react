@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import RoleBaseApp from './RoleBaseAuth/RoleBaseAuthApp';
-import { AuthProvider } from './RoleBaseAuth/AuthProvider';
+// import RoleBaseApp from './RoleBaseAuth/RoleBaseAuthApp';
+
 // import { Auth0Provider } from '@auth0/auth0-react'; //Oath2Login
 // import App, { LogoutFun } from './Oath2Login2/App';
 import { GoogleOAuthProvider } from '@react-oauth/google'; 
 import App from './AccessTokenAuth/App';
+import { AuthProvider } from './AccessTokenAuth/Context/AuthProvide';
 // import App from './Oath2Login/App';
 // import App from './Oath2Login2/App';
-// import App from './AccessTokenAuth/App';
 
 
 
@@ -50,6 +50,19 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <BrowserRouter>
+//       <AuthProvider>
+//         <Routes>
+//           <Route path="/*" element={<App />} />
+//         </Routes>
+//       </AuthProvider>
+//     </BrowserRouter>
+//   </React.StrictMode>,
+//   document.getElementById('root')
+// );
 
 //oath2 login 1 // add https://dev-1xgv0i5r33flbcp3.us.auth0.com/login/callback in google console redirect url
 const domain = process.env.REACT_APP_AUTH0_DOMAIN;

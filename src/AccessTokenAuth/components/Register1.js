@@ -12,25 +12,22 @@ const Register = () => {
     const userRef = useRef();
     const errRef = useRef();
 
-    const [userObj,setUserObj]=useState(
-        {userName:'avr3',passWord:'Avr3@',roles:['']}
-    );
+    // user=
 
-    const updateObj = (e) => {
-        setUserObj(previousState => {
-          return { ...previousState, [e.target.name]: e.target.value }
-        });
-      }
-
+    const [userName, setUserName] = useState('avr3');
     const [validName, setValidName] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
 
+    const [passWord, setPassWord] = useState('Avr3@');
     const [validPwd, setValidPwd] = useState(false);
     const [pwdFocus, setPwdFocus] = useState(false);
 
     const [matchPwd, setMatchPwd] = useState('Avr3@');
     const [validMatch, setValidMatch] = useState(false);
     const [matchFocus, setMatchFocus] = useState(false);
+
+    const [roles, setRoles] = useState([]);
+    const [role, setRole] = useState('');
 
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
@@ -40,18 +37,29 @@ const Register = () => {
     }, [])
 
     useEffect(() => {
-        setValidName(USER_REGEX.test(userObj.userName));
-    }, [userObj.userName])
+        setValidName(USER_REGEX.test(userName));
+    }, [userName])
 
     useEffect(() => {
-        setValidPwd(PWD_REGEX.test(userObj.passWord));
-        setValidMatch(userObj.passWord === matchPwd);
-    }, [userObj.passWord, matchPwd])
+        setValidPwd(PWD_REGEX.test(passWord));
+        setValidMatch(passWord === matchPwd);
+    }, [passWord, matchPwd])
 
     useEffect(() => {
         setErrMsg('');
-    }, [userObj.userName, userObj.passWord, matchPwd, userObj.roles])
+    }, [userName, passWord, matchPwd, roles])
 
+    function assignRoles(e){
+        const singleRole= e.target.value
+        setRole(singleRole)
+        console.log("singleRole:"+role);
+         setRoles([e.target.value])
+        //  setRoles([ ...roles, role ]);
+        // setRoles(prevStateArray => [...prevStateArray, role]);
+        console.log("roles list:"+roles);
+     }
+
+  
         const [checkedItems, setCheckedItems] = useState({  // State to manage checked items
           USER: false,
           EDITOR: false,
@@ -70,39 +78,47 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log('1 userObj',userObj);
         const temp = Object.keys(checkedItems).filter(key => checkedItems[key]);
-        console.log('1 temp',temp);
-
-        // setUserObj(previousState => {
-        //     return { ...previousState, userObj.roles: [temp] }
-        //   });
-
-        setUserObj(...userObj,userObj.roles,temp)
-        console.log('2 userObj',userObj);
-
-
+        console.log('Selected options:-', temp);
+        for (const item of temp) {
+            // setRoles([ ...roles, {item} ]);
+          }
+          setRoles([ ...roles, temp]);
+        // setRoles(prevStateArray => [...prevStateArray, temp]);
+        console.log('roles:', roles);
+       
         // if button enabled with JS hack
-        const v1 = USER_REGEX.test(userObj.userName);
-        const v2 = PWD_REGEX.test(userObj.passWord);
+        const v1 = USER_REGEX.test(userName);
+        const v2 = PWD_REGEX.test(passWord);
         if (!v1 || !v2) {
             setErrMsg("Invalid Entry");
             return;
         }
         try {
             const response = await axios.post(REGISTER_URL,
-                JSON.stringify({ userObj  }),
+                JSON.stringify({ userName, passWord, roles }),
                 {
                     headers: { 'Content-Type': 'application/json','Accept': 'application/json'},
                     withCredentials: true
                 }
             );
+
+            // const response =  await fetch("http://localhost:8080/test/demo",
+            //     {
+            //         method: "GET",
+            //         header: {
+            //             "Content-Type": "application/json",
+            //             "Accept": "application/json"
+            //         }
+            //     });
+
+            
             console.log(JSON.stringify(response?.data));
             //console.log(JSON.stringify(response))
             setSuccess(true);
             //clear state and controlled inputs
-            setUserObj(...userObj,userObj.userName,' ')
-            setUserObj(...userObj,userObj.passWord,' ')
+            setUserName('');
+            setPassWord('');
             setMatchPwd('');
         } catch (err) {
             if (!err?.response) {
@@ -133,22 +149,22 @@ const Register = () => {
                         <label htmlFor="username">
                             Username:
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
-                            <FontAwesomeIcon icon={faTimes} className={validName || !userObj.userName ? "hide" : "invalid"} />
+                            <FontAwesomeIcon icon={faTimes} className={validName || !userName ? "hide" : "invalid"} />
                         </label>
                         <input
                             type="text"
                             id="username"
                             ref={userRef}
                             autoComplete="off"
-                            onChange={(e) => updateObj(e)}
-                            value={userObj.userName}
+                            onChange={(e) => setUserName(e.target.value)}
+                            value={userName}
                             required
                             aria-invalid={validName ? "false" : "true"}
                             aria-describedby="uidnote"
                             onFocus={() => setUserFocus(true)}
                             onBlur={() => setUserFocus(false)}
                         />
-                        <p id="uidnote" className={userFocus && userObj.userName && !validName ? "instructions" : "offscreen"}>
+                        <p id="uidnote" className={userFocus && userName && !validName ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} />
                             4 to 24 characters.<br />
                             Must begin with a letter.<br />
@@ -159,13 +175,13 @@ const Register = () => {
                         <label htmlFor="password">
                             Password:
                             <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
-                            <FontAwesomeIcon icon={faTimes} className={validPwd || !userObj.passWord ? "hide" : "invalid"} />
+                            <FontAwesomeIcon icon={faTimes} className={validPwd || !passWord ? "hide" : "invalid"} />
                         </label>
                         <input
                             type="password"
                             id="password"
-                            onChange={(e) =>  updateObj(e)}
-                            value={userObj.passWord}
+                            onChange={(e) => setPassWord(e.target.value)}
+                            value={passWord}
                             required
                             aria-invalid={validPwd ? "false" : "true"}
                             aria-describedby="pwdnote"
@@ -213,7 +229,7 @@ const Register = () => {
           type="checkbox"
           name="USER"
           checked={checkedItems.USER}
-          onChange={ handleCheckboxChange}
+          onChange={handleCheckboxChange}
         />
         USER access
       </label>

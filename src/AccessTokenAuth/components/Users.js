@@ -14,12 +14,14 @@ const Users = () => {
 
         const getUsers = async () => {
             try {
-                const response = await axiosPrivate.get('/users', {
+                const response = await axiosPrivate.get('/get', {
                     signal: controller.signal
                 });
                 const usernames=response.data.map(user => user.userName)
-                console.log(response.data);
+                console.log("get api user names:"+usernames);
                // isMounted && setUsers(usernames);
+               console.log("get api response:"+response);
+               console.log("get api response.data:"+response.data);
                isMounted && setUsers(response.data);
             } catch (err) {
                 console.error(err);
@@ -40,10 +42,10 @@ const Users = () => {
             <h2>Users List</h2>
             {users?.length
                 ? (
-                    <ul>
-                        //{users.map((user, i) => <li key={i}>{user}</li>)}
-                       {users.map((user, i) => <li key={i}>{user?.username}</li>)}
-                    </ul>
+                    <ol>
+                        {/* {users.map((user, i) => <li key={i}>{user}</li>)} */}
+                       {users.map((user, i) => <li key={i}>{user?.username}  {user.roles}</li>)}
+                    </ol>
                 ) : <p>No users to display</p>
             }
         </article>
