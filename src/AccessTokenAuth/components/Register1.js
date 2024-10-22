@@ -14,15 +14,15 @@ const Register = () => {
 
     // user=
 
-    const [userName, setUserName] = useState('avr3');
+    const [userName, setUserName] = useState('');//
     const [validName, setValidName] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
 
-    const [passWord, setPassWord] = useState('Avr3@');
+    const [passWord, setPassWord] = useState('');//
     const [validPwd, setValidPwd] = useState(false);
     const [pwdFocus, setPwdFocus] = useState(false);
 
-    const [matchPwd, setMatchPwd] = useState('Avr3@');
+    const [matchPwd, setMatchPwd] = useState('');//
     const [validMatch, setValidMatch] = useState(false);
     const [matchFocus, setMatchFocus] = useState(false);
 
@@ -217,15 +217,15 @@ const Register = () => {
                             Must match the first password input field.
                         </p>
 
-
+<div  className={validMatch && matchPwd ? "hidden" : "none"}>
                         <label htmlFor="user_roles">
                             user roles:
                             <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
                         </label>
-
+<br/>
                         <label>
-        <input
+        <input 
           type="checkbox"
           name="USER"
           checked={checkedItems.USER}
@@ -253,6 +253,7 @@ const Register = () => {
         />
         ADMIN access
       </label>  
+      </div>
 
                         {/* <input
                             type="text"

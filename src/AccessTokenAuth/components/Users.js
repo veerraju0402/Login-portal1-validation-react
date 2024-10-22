@@ -44,7 +44,12 @@ const Users = () => {
                 ? (
                     <ol>
                         {/* {users.map((user, i) => <li key={i}>{user}</li>)} */}
-                       {users.map((user, i) => <li key={i}>{user?.username}  {user.roles}</li>)}
+                       {users.map((user, i) => <li key={i}>{user?.username}  {user.roles.map(role =>{
+                        return (
+                            <dt style={{color: "red"}}>{role}</dt>
+                            // <dd style={{color: "red"}} key={role}> {role} </dd>
+                        )
+                       })}</li>)}
                     </ol>
                 ) : <p>No users to display</p>
             }

@@ -13,11 +13,19 @@ const Register = () => {
     const errRef = useRef();
 
     const [userObj,setUserObj]=useState(
-        {userName:'avr3',passWord:'Avr3@',roles:['']}
+        // {userName:'avr3',passWord:'Avr3@',roles:[]}
+        {}
+        //{userName:null,passWord:null,roles:[]}
+        //  {userName:'',passWord:'',roles:[]}
     );
 
     const updateObj = (e) => {
         setUserObj(previousState => {
+            console.log("validName:"+validName+" - "+e.target.value);
+            console.log("validPwd:"+validPwd+" - "+e.target.value);
+           
+            console.log("------------------------");
+            
           return { ...previousState, [e.target.name]: e.target.value }
         });
       }
@@ -28,7 +36,7 @@ const Register = () => {
     const [validPwd, setValidPwd] = useState(false);
     const [pwdFocus, setPwdFocus] = useState(false);
 
-    const [matchPwd, setMatchPwd] = useState('Avr3@');
+    const [matchPwd, setMatchPwd] = useState('');
     const [validMatch, setValidMatch] = useState(false);
     const [matchFocus, setMatchFocus] = useState(false);
 
@@ -44,6 +52,7 @@ const Register = () => {
     }, [userObj.userName])
 
     useEffect(() => {
+        console.log("userObj.passWord:"+userObj.passWord+" matchpwsd:"+matchPwd);
         setValidPwd(PWD_REGEX.test(userObj.passWord));
         setValidMatch(userObj.passWord === matchPwd);
     }, [userObj.passWord, matchPwd])
@@ -73,14 +82,10 @@ const Register = () => {
         console.log('1 userObj',userObj);
         const temp = Object.keys(checkedItems).filter(key => checkedItems[key]);
         console.log('1 temp',temp);
-
-        // setUserObj(previousState => {
-        //     return { ...previousState, userObj.roles: [temp] }
-        //   });
-
-        setUserObj(...userObj,userObj.roles,temp)
+       
+        userObj.roles=temp;
+        setUserObj(userObj);
         console.log('2 userObj',userObj);
-
 
         // if button enabled with JS hack
         const v1 = USER_REGEX.test(userObj.userName);
@@ -91,7 +96,7 @@ const Register = () => {
         }
         try {
             const response = await axios.post(REGISTER_URL,
-                JSON.stringify({ userObj  }),
+                JSON.stringify(userObj),
                 {
                     headers: { 'Content-Type': 'application/json','Accept': 'application/json'},
                     withCredentials: true
@@ -138,6 +143,7 @@ const Register = () => {
                         <input
                             type="text"
                             id="username"
+                            name="username"
                             ref={userRef}
                             autoComplete="off"
                             onChange={(e) => updateObj(e)}
@@ -164,6 +170,7 @@ const Register = () => {
                         <input
                             type="password"
                             id="password"
+                            name="passWord"
                             onChange={(e) =>  updateObj(e)}
                             value={userObj.passWord}
                             required
@@ -188,6 +195,7 @@ const Register = () => {
                         <input
                             type="password"
                             id="confirm_pwd"
+                            name="matchPwd"
                             onChange={(e) => setMatchPwd(e.target.value)}
                             value={matchPwd}
                             required
@@ -201,13 +209,13 @@ const Register = () => {
                             Must match the first password input field.
                         </p>
 
-
+<div disabled={!validName || !validPwd || !validMatch ? true : false}>
                         <label htmlFor="user_roles">
                             user roles:
                             <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
                         </label>
-
+<br/>
                         <label>
         <input
           type="checkbox"
@@ -237,7 +245,7 @@ const Register = () => {
         />
         ADMIN access
       </label>  
-
+</div>
                         {/* <input
                             type="text"
                             id="user_roles"
